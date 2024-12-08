@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自動複製功能</title>
+    <style>
+        body {
+            background-color: #121212; /* 暗黑模式背景色 */
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #FFFF00; /* 螢光黃 */
+            color: black; /* 黑色字 */
+        }
+        button.active {
+            background-color: #FFD700; /* 選中後的顏色 */
+        }
+        .generate-button {
+            background-color: #FF69B4; /* 粉紅色 */
+            color: white; /* 白色字 */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>申訴自動揀寫生成器</h1>
+    <div>
+            <button onclick="toggleButton('1程3單')">1程3單</button>
+         <button onclick="toggleButton('1程4單')">1程4單</button>
+         <button onclick="toggleButton('搶左2單，路途東西南北不順路')">搶左2單</button>
+        <button onclick="toggleButton('路途不方便')">路途不便</button>
+        <button onclick="toggleButton('等待多個交通燈')">交通燈</button>
+    <br>
+        <button onclick="toggleButton('等餐太耐')">等餐</button>
+        <button onclick="toggleButton('等升降機太耐')">升降機</button>
+        <button onclick="toggleButton('被困升降機')">困機</button>
+        <button onclick="toggleButton('孖單，2個客人之間不同座)">送客不同座</button>
+    <br>
+        <button onclick="toggleButton('因為商店用紙袋，送程時間需要延長及額外保護，確保中途的速度不會引致倒瀉或穿袋')">商店紙袋慢速</button>
+        <button onclick="toggleButton('路途斜路太斜沒有氣力踏')">上山太斜</button>
+        <button onclick="toggleButton('餐點數量過多過重，無法有較完成準時送遞')">餐點過重</button>
+        <button onclick="toggleButton('需要時間綁好並放入保温袋')">綁好需時</button>
+        <button onclick="toggleButton('無法聯絡客人而超時')">與客失聯</button>
+    <br>
+        <button onclick="toggleButton('中途插了孖單沒有自動延長至合理時間')">插孖單超時</button>
+        <button onclick="toggleButton('孖單完成一單後的時間不足')">孖單時間短</button>
+        <button onclick="toggleButton('地圖看似近，實際需要經過商場過橋到對面')">地點近行商場遠</button>
+    <br>
+        <button onclick="toggleButton('送遞時間大數據被其他使用電動的減到不合理')">電控大數據</button>
+        <button onclick="toggleButton('接單地點與取餐地點過遠，無法在有較時間取餐')">接單地點遠</button>
+        <button onclick="toggleButton('客人的PIN點與地址有偏差')">PIN錯</button>
+        <button onclick="toggleButton('第1次到該商戶接餐，需要較多時間尋找')">找不到商戶</button>
+        <button onclick="toggleButton('第1次到該商戶接餐，商場太大，上多層電樓梯，需要更多時間尋找')">商場找不到商戶</button>
+        <button onclick="toggleButton('因私人屋苑需要經過多重保安，需要步行較遠才到達住址大廈')">保安繞大圈</button>
+    <br>
+        <button onclick="toggleButton('到店後餐品已被其他人取走')">到店偷餐</button>
+        <button onclick="toggleButton('上門送餐後下一個餐被人偷左')">中途偷餐</button>
+    <br>
+        <button onclick="toggleButton('發生交通意外')">出事固</button>
+        <button onclick="toggleButton('電動單車撞到及倒瀉')">被電L撞</button>
+        <button onclick="toggleButton('正在配合警方調查')">POPO</button>
+        <button onclick="toggleButton('戴具被保安拘留')">保安鎖車</button>
+        <button onclick="toggleButton('戴具被人偷左')">偷車</button>
+        <button onclick="toggleButton('被撞倒地需要入院')">入院</button>
+        <button onclick="toggleButton('送遞途中剎車出現問題導致炒餐，受偒倒地')">剎車失靈</button>
+
+    <br>
+
+
+    </div>
+    <br>
+    <button class="generate-button" onclick="generateAndCopy()">生成並複製</button>
+
+    <script>
+        const selectedButtons = new Set();
+
+        function toggleButton(label) {
+            const button = event.target;
+            if (selectedButtons.has(label)) {
+                selectedButtons.delete(label);
+                button.classList.remove('active');
+            } else {
+                selectedButtons.add(label);
+                button.classList.add('active');
+            }
+        }
+
+        function generateAndCopy() {
+            if (selectedButtons.size === 0) {
+                alert('請選擇至少一個按鈕。');
+                return;
+            }
+            const result = Array.from(selectedButtons).join('，');
+            navigator.clipboard.writeText(result).then(() => {
+                alert(`已複製: ${result}`);
+            }).catch(err => {
+                alert('複製失敗！');
+            });
+        }
+    </script>
+
+</body>
+</html>
