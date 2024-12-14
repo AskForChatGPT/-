@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自動複製功能</title>
+    <style>
+        body {
+            background-color: #121212; /* 暗黑模式背景色 */
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            padding: 5px 10px;
+            margin: 10px;
+            font-size: 18px;
+	    font-weight: bold; /* 字体加粗 */
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: #d3d313; /* 螢光黃 */
+            color: black; /* 黑色字 */
+        }
+        button.active {
+            background-color: #ffa200; /* 選中後的顏色 */
+	    font-weight: bold; /* 字体加粗 */
+        }
+        .generate-button {
+            background-color: #FF69B4; /* 粉紅色 */
+            color: white; /* 白色字 */
+        }
+	.line {
+	     cursor: pointer; /* 鼠标指针变为手形 */
+            white-space: nowrap; /* 防止换行 */
+            overflow: hidden; /* 隐藏溢出部分 */
+        }
+	   small {
+            display: block; /* 使小字成为独立块 */
+            margin-top: 5px; /* 上边距 */
+            color: white; /* 字体颜色 */
+        }
+	.toggle-button {
+            display: none; /* 按钮显示 */
+            margin-right: 10px; /* 按钮之间留一点空间 */
+        }
+        .control-button {
+            margin-bottom: 20px; /* 控制按钮与其他内容的间距 */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            max-height: calc(100vh * 0.66); /* 設置圖片高度為螢幕高度的 2/3 */
+        }
+          #content {
+            background: #121212;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 垂直置中 */
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>申訴懶人包</h1>
+    <small>V0.09</small>
+    <br>    <br>
+
+<button id="shareBtn">分享QR下載</button>
+
+<div id="modal">
+    <div id="content">
+        <img id="displayImage" src="" alt="如何放入IPHONE使用">
+        <button id="nextBtn">下一步</button>
+        <button onclick="hideModal()">關閉</button>
+    </div>
+</div>
+
+    <div>
+         <button class="control-button" onclick="toggleAllButtons()">全部展開或隱藏</button>
+
+    <div class="line" id="dynamic-line-1" onclick="toggleButtons('buttons-a')"></div>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('系統中途插單')">插單</button>
+	   <button class="toggle-button"  id="buttons-a" onclick="toggleButton('1程3單')">1程3單</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('派左車手單')">車手單</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('派左單手單')">單車單</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('1程4單')">1程4單</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('搶左2單，路途東西南北不順路')">搶左2單</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('接單地點與取餐地點過遠，無法在有較時間取餐')">接單地點遠</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('上單送餐地點陌生，需要時間找回程路取餐')">搵路出去攞餐</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('路途不方便')">路途不便</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('路線太亂，分唔清去邊到先較順路')">路線太亂</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('需要時間搭交通工具')">等車搭</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('商店在港鐵入閘範圍內，需要等待店前來或自行付上入閘費取餐')">入閘取餐</button>
+        <button class="toggle-button"  id="buttons-a" onclick="toggleButton('最後時間因為大廈沒有信號，導致超時')">拍照冇信號</button>
+    <br>    <br>
+    <div class="line" id="dynamic-line-2" onclick="toggleButtons('buttons-b')"></div>
+
+        <button class="toggle-button"  id="buttons-b" onclick="toggleButton('等餐太耐')">等餐</button>
+        <button class="toggle-button"  id="buttons-b" onclick="toggleButton('等餐過左另一單取餐時間')">餐拖餐</button>
+        <button class="toggle-button"  id="buttons-b" onclick="toggleButton('得1部𨋢可以使用')">1部𨋢</button>
+        <button class="toggle-button"  id="buttons-b" onclick="toggleButton('等𨋢太耐')">𨋢太耐</button>
+        <button class="toggle-button"  id="buttons-b" onclick="toggleButton('等𨋢排隊人數眾多')">排隊等𨋢</button>
+        <button class="toggle-button"  id="buttons-b" onclick="toggleButton('被困升降機')">困機</button>
+        <button class="toggle-button"  id="buttons-b" onclick="toggleButton('2個客人之間不同座')">送客不同座</button>
+    <br>    <br>
+
+    <div class="line" id="dynamic-line-10" onclick="toggleButtons('buttons-j')"></div>
+        <button class="toggle-button"  id="buttons-j" onclick="toggleButton('餐品太多，沒有足夠位置放入保温袋')">保温袋冇位</button>
+        <button class="toggle-button"  id="buttons-j" onclick="toggleButton('餐品需要更多時間綁好並放入保温袋')">綁好需時</button>
+        <button class="toggle-button"  id="buttons-j" onclick="toggleButton('因為商店用紙袋，送程時間需要延長及額外保護，確保中途的速度不會引致倒瀉或穿袋')">紙袋慢送</button>
+        <button class="toggle-button"  id="buttons-j" onclick="toggleButton('商店放太多食物及飲品於同一個紙袋，導致中途因紙袋超出負荷穿了')">紙袋重到瀉</button>
+        <button class="toggle-button"  id="buttons-j" onclick="toggleButton('膠袋太薄，中途被自身餐品殞穿了')">膠袋薄到穿</button>
+        <button class="toggle-button"  id="buttons-j" onclick="toggleButton('紙湯盒設計不足，導致液體濺出')">紙製湯盒</button>
+        <button class="toggle-button"  id="buttons-j" onclick="toggleButton('餐點數量過多過重，無法有較完成準時送遞')">餐點過重</button>
+    <br>    <br>
+
+    <div class="line" id="dynamic-line-3" onclick="toggleButtons('buttons-c')"></div>
+
+        
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('等待多個交通燈')">交通燈</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('路程過多行人路，只能推車慢送')">太多行人路</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('路途斜路太斜沒有氣力踏')">上山太斜</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('路途太多樓梯且不是樓層間的樓梯，氣喘到有機會入院')">玩命樓梯</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('因爆水管、交通意外、舖路工程，需要更多時間前住目的地')">交通塞滿</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('忘記取回證件，所以走回頭路')">攞返證件</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('路程被山泥傾瀉阻塞')">山泥傾瀉</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('路程被水浸阻塞')">水浸</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('路程被颱風後的倒樹阻塞')">颱風樹倒</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('遺失證件，保案不准進入')">遺失證件</button>
+        <button class="toggle-button"  id="buttons-c" onclick="toggleButton('無法完成送遞')">無法送遞</button>
+        
+    <br>    <br>
+    <div class="line" id="dynamic-line-4" onclick="toggleButtons('buttons-d')"></div>
+
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('單號○○到單號○○之間')">單號到單號之間</button>
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('第○點去第○點之間')">第幾點之間</button>
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('剩餘○分鐘')">只餘○分鐘</button>
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('時間不足')">時間不足</button>
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('中途插了孖單沒有自動延長至合理時間')">插孖單超時</button>
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('孖單完成一單後的時間不足')">孖單時間短</button>
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('地圖看似近，實際需要經過商場過橋到對面')">地點近行商場遠</button>
+        <button class="toggle-button"  id="buttons-d" onclick="toggleButton('單車到達商場停泊方向和取餐再送目的地，需要經商場來回2次')">下車來回商場送</button>
+    <br>    <br>
+    <div class="line" id="dynamic-line-5" onclick="toggleButtons('buttons-e')"></div>
+
+
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('送遞時間大數據被其他使用電動的減到不合理')">電控大數據</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('第1次到該商戶接餐')">第1次揾間店</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('需要較多時間尋找')">搵唔到商戶</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商場太大，上多層電樓梯，需要更多時間尋找')">商場大搵唔到商戶</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶名與實體店牌名不乎')">商戶名唔同</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶爆單')">商戶爆單</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶還有多個平台訂單')">商戶平台過多</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶處理自取單優先')">自取優先</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶處理其他平台優先')">其他平台優先</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('本單前還有多個單商戶未處理')">前面太多單</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶印單機固障，未能有較處理訂單')">商戶壞機</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶員工不足')">人手不足</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶新員工不熟集訂單處理流程')">新人阻住曬</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('訂單嚴重滯留')">訂單嚴重滯留</button>
+        <button class="toggle-button"  id="buttons-e" onclick="toggleButton('商戶與其他外賣員發生衝突，影響本單取餐時間')">同行罵爆商戶</button>
+    <br>    <br>
+    <div class="line" id="dynamic-line-6" onclick="toggleButtons('buttons-f')"></div>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('客人的PIN點與地址有偏差')">PIN錯</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('GPS路線導航出錯，不斷兜圈')">GPS導航兜圈</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('客人填錯地址，需要更改行程')">客人填錯地址</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('送錯餐後接左其他單，客人才很遟反映問題，無法及時補救')">送錯地址好耐客人才返應</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('客人向我提出不合理的額外要求')">無理要求</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('客人對我的態度帶來侮辱')">被客人爆粗</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('系統中的地圖無法顯示大廈位址')">地圖冇大廈</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('屋苑太大，地形複雜不易找好路線')">地形複雜</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('因私人屋苑需要兜過多重保安，需要步行較遠才到達住址大廈')">保安兜大圈</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('村屋無法用GPS導航，需要更多時間邊行邊對路，以及找到正確的門號')">村屋難找</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('無法聯絡客人而超時')">與客失聯</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('客人要求的放置指示未能乎合保安的要求，無法送遞')">保安唔俾放置</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('因場所保安要求，外賣員不得進入')">保安唔俾入</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('到達樓宇閘門，沒有保安和住客開門')">冇人開閘</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('語言限制無法和客溝通')">雞同鴨講</button>
+        <button class="toggle-button"  id="buttons-f" onclick="toggleButton('我付上足夠照片證明送餐時有使用保温袋，直到扺達樓下時，為了證明餐品送達無誤，需要取下拍照')">證明有用保温袋</button>
+    <br>    <br>
+
+
+    <div class="line" id="dynamic-line-7" onclick="toggleButtons('buttons-g')"></div>
+        <button class="toggle-button"  id="buttons-g" onclick="toggleButton('到店後餐品已被其他人取走')">到店偷餐</button>
+        <button class="toggle-button"  id="buttons-g" onclick="toggleButton('上門送餐後下一個餐被人偷左')">中途偷餐</button>
+        <button class="toggle-button"  id="buttons-g" onclick="toggleButton('送餐期間被野生猴子偷餐')">猴子偷餐</button>
+        <button class="toggle-button"  id="buttons-g" onclick="toggleButton('我付上足夠照片證明送達地址、樓層與門號皆為正確，客人有意屈人冇餐到')">證明客人屈餐</button>
+    <br>    <br>
+    <div class="line" id="dynamic-line-8" onclick="toggleButtons('buttons-h')"></div>
+
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('發生交通意外')">出事固</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('被電動單車撞到及倒瀉餐品')">被電L撞</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('載具撞到人')">撞到路人</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('因兜過違泊車輛')">因兜死車</button>   
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('戴具被其他車輛撞毀')">撞車</button>      
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('因夜晚光線不足睇不清路面')">路面太黑</button>   
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('在合規行駛路徑被開')">避開</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('路人')">路人</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('動物')">動物</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('欄杆')">欄杆</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('因天兩濕滑載具打滑白鴿轉')">濕滑</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('被凹陷地面')">凹陷</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('被路面鐵軌入餅')">路面鐵軌</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('炒車了')">自炒</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('被野豬襲擊')">野豬突襲</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('被野狗搥及咬傷')">野狗咬傷</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('被密蜂群搥及釘傷')">蜜峰咬傷</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('正在配合警方調查')">POPO</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('戴具被保安拘留')">保安鎖車</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('戴具被人偷左')">偷車</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('被撞倒地需要入院治理')">入院</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('送遞途中剎車出現問題導致炒餐，受偒倒地')">剎車失靈</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('送遞途中爆胎，無法在有較時間完成')">爆胎</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('取餐後，車胎無辜地被人刺破，無法在有較時間完成')">被人爆胎</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('載具沒有燃料')">冇燃料</button>
+        <button class="toggle-button"  id="buttons-h" onclick="toggleButton('手機無預警下冇電關機')">手機冇電</button>
+    <br>    <br>
+    <div class="line" id="dynamic-line-9" onclick="toggleButtons('buttons-i')"></div>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('身體不適')">身體不適</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('人有三急中途如廁')">中途肚瀉</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('送遞中損傷流血')">受傷流血</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('中途扭偒')">扭偒</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('血糖低')">血糖低</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('心跳過快')">心跳過快</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('體温過低')">太凍</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('頭暈')">頭暈</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('中途倒地')">中途倒地</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('曾經一度昏迷')">一度昏迷</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('集中力下降')">集中力</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('記憶力下降')">記憶力</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('嚴重車禍撞到斷肢')">斷肢</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('嚴重車禍撞到內藏出血和功能受損')">內出血</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('因以住事故做成身體不便，但慾意開工')">康復者送餐</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('需要CALL救護車入院治理')">CALL白車</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('中途需要休息')">休息</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('需要平台取消訂單')">取消訂單</button>
+        <button class="toggle-button"  id="buttons-i" onclick="toggleButton('需要平台請另一名送遞員送達')">代單</button>
+    </div>
+    <br>    <br>
+    <button  class="generate-button" onclick="generateAndCopy()">生成並複製</button>
+
+    <script>
+        const selectedButtons = new Set();
+
+        function toggleButton(label) {
+            const button = event.target;
+            if (selectedButtons.has(label)) {
+                selectedButtons.delete(label);
+                button.classList.remove('active');
+            } else {
+                selectedButtons.add(label);
+                button.classList.add('active');
+            }
+        }
+
+        function generateAndCopy() {
+            if (selectedButtons.size === 0) {
+                alert('請選擇至少一個按鈕。');
+                return;
+            }
+            const result = Array.from(selectedButtons).join('，');
+            navigator.clipboard.writeText(result).then(() => {
+                alert(`已複製: ${result}`);
+            }).catch(err => {
+                alert('複製失敗！');
+            });
+        }
+	function updateLine(lineId, char) {
+            const lineElement = document.getElementById(lineId);
+            const screenWidth = window.innerWidth; // 获取屏幕宽度
+            const charWidth = 8; // 每个字符的估计宽度（可根据实际情况调整）
+            const totalChars = Math.floor(screenWidth / charWidth); // 计算总字符数
+            const numDashes = Math.floor((totalChars - 1) / 2); // 在指定字符的两侧填充的-字符数量
+
+            // 生成字符
+            const lineContent = '-'.repeat(numDashes) + char + '-'.repeat(numDashes);
+            lineElement.textContent = lineContent; // 填充字符
+        }
+        function toggleButtons(buttonGroupId) {
+            const buttons = document.querySelectorAll(`#${buttonGroupId}`);
+            const isHidden = buttons[0].style.display === 'none';
+
+            buttons.forEach(button => {
+                button.style.display = isHidden ? 'inline-block' : 'none'; // 批量处理按钮显示状态
+            });
+        }
+        function toggleAllButtons() {
+            const allButtons = document.querySelectorAll('.toggle-button');
+            const areAllHidden = Array.from(allButtons).every(button => button.style.display === 'none');
+
+            allButtons.forEach(button => {
+                button.style.display = areAllHidden ? 'inline-block' : 'none'; // 切换所有按钮的显示状态
+            });
+        }
+
+        // 初始化，默认显示所有按钮
+        document.querySelectorAll('.toggle-button').forEach(button => {
+            button.style.display = 'none'; // 确保初始状态为隐藏
+        });
+        // 初始化
+        updateLine('dynamic-line-1', '常遇問題'); // 第一段后填入A
+        updateLine('dynamic-line-2', '等待問題'); // 第二段后填入B
+        updateLine('dynamic-line-3', '路途問題'); // 第三段后填入C
+        updateLine('dynamic-line-4', '孖單問題');
+        updateLine('dynamic-line-5', '商店問題');
+        updateLine('dynamic-line-6', '住客問題');
+        updateLine('dynamic-line-7', '偷餐問題');
+        updateLine('dynamic-line-8', '路面問題');
+        updateLine('dynamic-line-9', '身體問題');
+        updateLine('dynamic-line-10', '餐品問題');
+
+        // 窗口调整大小时更新
+        window.onresize = function() {
+            updateLine('dynamic-line-1', '常遇問題');
+            updateLine('dynamic-line-2', '等待問題');
+            updateLine('dynamic-line-3', '路途問題');
+            updateLine('dynamic-line-4', '孖單問題');
+            updateLine('dynamic-line-5', '商店問題');
+            updateLine('dynamic-line-6', '住客問題');
+            updateLine('dynamic-line-7', '偷餐問題');
+            updateLine('dynamic-line-8', '路面問題');
+            updateLine('dynamic-line-9', '身體問題');
+            updateLine('dynamic-line-10', '餐品問題');
+        };
+
+        //QR分享
+
+    const urls = [
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3%20V0.05.html",//QR分享檔
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T01.jpeg?raw=true", // 教學圖片連結
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T02.png?raw=true",
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T03.jpeg?raw=true",
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T04.jpeg?raw=true",
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T05.jpeg?raw=true",
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T06.jpeg?raw=true",
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T07.jpeg?raw=true",
+        "https://github.com/AskForChatGPT/-/blob/main/%E7%94%B3%E8%A8%B4%E8%87%AA%E5%8B%95%E9%81%B8%E5%8F%96%E8%A4%87%E6%8E%A3T08.jpeg?raw=true"
+    ];
+     let currentIndex = 0;
+
+    document.getElementById('shareBtn').onclick = function() {
+        showQRCode();
+    };
+
+    document.getElementById('nextBtn').onclick = function() {
+        currentIndex++;
+        if (currentIndex < urls.length) {
+            showImage();
+        } else {
+            hideModal();
+        }
+    };
+
+    function showQRCode() {
+        document.getElementById('displayImage').src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(urls[0])}`;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function showImage() {
+        document.getElementById('displayImage').src = urls[currentIndex];
+    }
+
+    function hideModal() {
+        document.getElementById('modal').style.display = 'none';
+        currentIndex = 0; // 重設索引以便下次使用
+    }
+
+    </script>
+
+</body>
+</html>
